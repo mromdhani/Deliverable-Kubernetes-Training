@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-app-recreate
+  labels:
+    app: redis-app-recreate
+spec:
+  replicas: 10
+  strategy:
+        type: Recreate      
+  selector:
+    matchLabels:
+      app: redis-app-recreate
+  template:
+    metadata:
+      labels:
+        app: redis-app-recreate
+    spec:
+      containers:
+        - name: redis
+          image: redis:latest

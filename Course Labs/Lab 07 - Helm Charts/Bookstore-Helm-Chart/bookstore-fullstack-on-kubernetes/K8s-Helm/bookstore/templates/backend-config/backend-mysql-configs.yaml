@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-mysql-configs
+  namespace: default
+data:
+  MYSQL_DATABASE: {{ .Values.configMaps.mysql.MYSQL_DATABASE }}

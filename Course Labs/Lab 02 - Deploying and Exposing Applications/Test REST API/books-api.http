@@ -1,0 +1,28 @@
+GET http://localhost:8080/books HTTP/1.1
+
+###
+
+GET http://localhost:8080/books/2 HTTP/1.1
+
+###
+
+GET http://localhost:8080/books/3 HTTP/1.1
+
+
+###
+
+POST http://localhost:8080/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": 6,
+  "title": "Book 6",
+  "authors": " Author Book 6",
+  "description": "Some description Lorem ipsum Lorem ipsum",
+  "price": 10,
+  "imageURL": "https://covers.oreilly.com/images/0636920223788/cat.gif"
+}
+
+###
+
+GET http://localhost:8080/books/6 HTTP/1.1

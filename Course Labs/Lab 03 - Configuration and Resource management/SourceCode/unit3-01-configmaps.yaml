@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: default
+data:
+  DB_NAME: ConfluenceDB
+  USER_NAME: kubernetes
+  confluence.cnf: |-
+    [mysqld]      
+      default-storage-engine=INNODB
+      innodb_log_file_size=256M
+      max_allowed_packet=256M
+
+

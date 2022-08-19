@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookstore-api-v0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstore
+      tier: backend-api
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        tier: backend-api
+    spec:
+      containers:
+        - name: backend
+          ports:
+            - containerPort: 8080
+          image: "quay.io/mromdhani/bookstore-backend:v0"

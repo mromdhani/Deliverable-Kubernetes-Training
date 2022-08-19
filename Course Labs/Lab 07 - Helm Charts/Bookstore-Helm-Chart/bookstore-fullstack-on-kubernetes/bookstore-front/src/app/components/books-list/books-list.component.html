@@ -1,0 +1,27 @@
+<div class="card mt-1">
+  <div class="card-header bg-info text-white">
+   <h5> Books</h5>
+  </div>
+  <div class="card-body">
+
+    <div class="row">
+
+      <div class="card align-items-center"  style="width:300px; margin:5px;" *ngFor='let product of data' >
+        <img class="card-img-top center" [src]='product.imageURL' 
+             [title]='product.title' 
+             [style.width.px]='"150"' 
+             [style.height.px]='"200"' 
+             [style.margin.px]='"5"' />
+        <div class="card-body text-center">
+          <h4 class="card-title">{{ product.title }}</h4>
+                    <h2 class="card-text">{{ product.price | currency:'EUR':'symbol':'1.2-2'}}</h2>
+          <a class="text text-primary" >
+            Show Details 
+             </a>
+        </div>
+       </div>
+      </div>
+
+ </div>
+  </div>
+

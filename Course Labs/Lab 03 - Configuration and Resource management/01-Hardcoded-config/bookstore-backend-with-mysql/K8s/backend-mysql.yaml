@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-mysql
+  labels:
+    app: mysql  
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: bookstore
+        tier: backend-mysql
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        tier: backend-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: quay.io/mromdhani/mysql:8.0
+        env:
+          - name: MYSQL_DATABASE
+            value: bookstoredb
+          - name: MYSQL_ROOT_PASSWORD
+            value: password 
+          - name: MYSQL_PASSWORD
+            value: password         
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: bookstore
+    tier: backend-mysql
+  ports:
+    - port: 3306
+      targetPort: 3306

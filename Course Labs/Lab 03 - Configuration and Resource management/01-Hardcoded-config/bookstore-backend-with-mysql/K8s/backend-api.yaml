@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstore
+      tier: backend-api
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        tier: backend-api
+    spec:
+      containers:
+        - name: backend
+          image: "quay.io/mromdhani/bookstore-backend:v1"
+          ports:
+          - containerPort: 8080
+          env:
+            - name: MYSQL_SERVER
+              value: backend-mysql
+            - name: MYSQL_DATABASE
+              value: bookstoredb
+            - name: MYSQL_PORT
+              value: '3306'
+            - name: MYSQL_PASSWORD
+              value: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: bookstore
+    tier: backend-api
+  ports:
+    - port: 8080
+      targetPort: 8080

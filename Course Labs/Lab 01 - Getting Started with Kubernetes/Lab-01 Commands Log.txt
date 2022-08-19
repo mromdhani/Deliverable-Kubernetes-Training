@@ -1,0 +1,53 @@
+kubectl cluster-info
+
+kubectl version --short
+
+kubectl get nodes
+
+kubectl get namespaces
+
+minikube start --driver=hyperv  
+
+minikube status
+
+minikube stop
+
+
+minikube delete
+
+kubectl config get-contexts
+
+kubectl config use-context docker-desktop
+
+kubectl config view
+
+kubectl config view -o jsonpath='{.users[*].name}' 
+
+kubectl config get-contexts 
+
+kubectl config current-context 
+
+kubectl create deployment nginx-app --image=quay.io/mromdhani/nginx
+
+kubectl get deployments
+
+kubectl get pods
+
+kubectl expose deployment nginx-app --type=LoadBalancer --port=8080 --target-port=80
+
+kubectl get services
+
+Dashbord on minikube:
+minikube dashboard
+
+Dashboard on Docker Desktop:
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+
+Enable Metrics Server:
+minikube addons enable metrics-server
+
+Check if Metrics Server is working: kubectl top nodes
+
+kubectl proxy
+
+kubectl -n kubernetes-dashboard describe secret default

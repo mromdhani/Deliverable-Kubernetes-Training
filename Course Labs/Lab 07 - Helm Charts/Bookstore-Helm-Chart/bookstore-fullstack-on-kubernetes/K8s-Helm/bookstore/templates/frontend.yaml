@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+spec:
+  replicas: {{ .Values.front.replicaCount }}
+  selector:
+    matchLabels:
+        app: bookstore
+        tier: frontend
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        tier: frontend 
+    spec:
+      containers:
+        - name: nginx
+          image: {{ .Values.front.image }}
+          imagePullPolicy:  {{ .Values.front.pullPolicy }}
+          ports:
+          - containerPort: 80
+          imagePullPolicy: {{ .Values.front.pullPolicy }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  type: {{ .Values.front.service.type }}
+  selector:
+    app: bookstore
+    tier: frontend
+  ports:
+    - name: http
+      port: {{ .Values.front.service.port }}
+      targetPort: {{ .Values.front.service.targetPort }}
+

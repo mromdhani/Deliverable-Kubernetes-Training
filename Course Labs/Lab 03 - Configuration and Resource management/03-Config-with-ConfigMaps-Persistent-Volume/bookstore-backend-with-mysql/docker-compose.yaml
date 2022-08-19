@@ -1,0 +1,36 @@
+version: '3'
+services:
+   mysql-service:
+      image: mysql:8.0      
+      restart: always
+      environment:
+        MYSQL_DATABASE: 
+        MYSQL_USER: 
+        MYSQL_PASSWORD: 
+        MYSQL_ROOT_PASSWORD: 
+      ports:       
+        - '33066:3306'
+      networks:
+        - backend-network
+    
+   spring-service:
+      build:
+        context: bookstore-backend
+        dockerfile: Dockerfile
+      environment:
+        MYSQL_SERVER:
+        MYSQL_DATABASE:
+        MYSQL_PORT: 
+        MYSQL_USER: 
+        MYSQL_PASSWORD: 
+        MYSQL_ROOT_PASSWORD: 
+      ports:
+        - '8080:8080'
+      networks:
+        - backend-network 
+  
+      depends_on:
+        - mysql-service   
+        
+networks:
+  backend-network:    

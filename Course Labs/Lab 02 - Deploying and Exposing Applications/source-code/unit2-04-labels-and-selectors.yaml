@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mysql
+      tier: db  # Line 10
+  template:
+    metadata:
+      labels:
+        app: mysql
+        tier: db  # Line 15
+    spec:
+      containers:
+      - image: quay.io/mromdhani/mysql:5.6
+        name: mysql
+        env:          
+        - name: MYSQL_ROOT_PASSWORD # Use secret in real usage
+          value: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    app: mysql
+    tier: db
+  ports:
+  - port: 3306
+

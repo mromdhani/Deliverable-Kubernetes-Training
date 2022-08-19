@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-nodeport
+spec:
+  selector:
+    matchLabels:
+      run: dockercloud-nodeport
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        run: dockercloud-nodeport
+    spec:
+      containers:
+      - name: dockercloud
+        image: quay.io/mromdhani/hello-world
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-nodeport
+spec:
+  # Exposes the service on a static port on each node
+  # so that we can access the service from outside the cluster 
+  type: NodePort
+  # When the node receives a request on the static port (30166) "select pods with
+  #  the label 'run' set to 'dockercloud-nodeport'" and forward the request to one of them
+  selector:
+    run: dockercloud-nodeport
+  ports:
+  - nodePort: 30166   # A static port assigned to each node for external access
+    port: 8080        # Port  exposed internally in the cluster
+    targetPort: 80    # port that containers are listening to
+    protocol: TCP

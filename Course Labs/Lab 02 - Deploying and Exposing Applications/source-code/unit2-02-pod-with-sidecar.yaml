@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-sidecar
+spec:
+  # Create a volume called 'shared-logs' that the app and sidecar share
+  volumes: 
+  - name: shared-logs
+    emptyDir: {}
+  containers:
+  # Main application container
+  - name: app-container
+    image: gcr.io/google-containers/busybox
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /html
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do
+          echo "$(date) <br/>" >> /html/index.html;
+          sleep 2;
+        done
+  # Sidecar container
+  - name: sidecar-container
+    image: quay.io/mromdhani/nginx
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /usr/share/nginx/html
+
+ 

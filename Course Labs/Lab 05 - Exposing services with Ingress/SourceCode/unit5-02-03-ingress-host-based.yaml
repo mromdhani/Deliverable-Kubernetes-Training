@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: example-ingress-host-based
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    # ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: apple.fruits.org
+    http:
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: apple-service
+              port:
+                number: 5678
+  - host: banana.fruits.org
+    http:
+      paths:              
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: banana-service
+              port:
+                number: 5678

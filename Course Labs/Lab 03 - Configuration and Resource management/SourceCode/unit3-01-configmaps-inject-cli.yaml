@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: inject-config-via-cli
+spec:
+  containers:
+    - name: consuming-container
+      image: k8s.gcr.io/busybox
+      command: [ "/bin/sh", "-c", "echo $(PROPERTY_DB_NAME); echo $(PROPERTY_DB_USER); env" ]
+      env:        
+        - name: PROPERTY_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config-cli
+              key: DB_NAME
+        - name: PROPERTY_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              name: mysql-config-cli
+              key: USER_NAME
+  restartPolicy: Never

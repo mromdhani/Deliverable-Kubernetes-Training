@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+spec:
+  replicas: {{ .Values.api.replicaCount }}
+  selector:
+    matchLabels:
+      app: bookstore
+      tier: backend-api
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        tier: backend-api
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.api.image }}
+          imagePullPolicy: {{ .Values.api.pullPolicy }}
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: backend-api-configs
+            - secretRef:
+                name: backend-api-secrets
+          resources:
+            requests:
+              memory: "300Mi"
+              cpu: "100m"
+            limits:
+              memory: "600Mi"
+              cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-api
+spec:
+  type: {{ .Values.api.service.type }}
+  selector:
+    app: bookstore
+    tier: backend-api
+  ports:  
+    - name: http
+      port: {{ .Values.api.service.port }}
+      targetPort: {{ .Values.api.service.targetPort }}

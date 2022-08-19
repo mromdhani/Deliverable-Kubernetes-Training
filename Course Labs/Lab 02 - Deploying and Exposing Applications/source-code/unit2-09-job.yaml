@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: consumer
+spec:
+  completions: 5
+  template:
+    metadata:
+      name: consumer
+    spec:
+      containers:
+      - name: consumer
+        image: gcr.io/google-containers/busybox
+        command: ["/bin/sh","-c"]
+        args: ["echo 'consuming a message'; sleep 5"]
+      restartPolicy: OnFailure

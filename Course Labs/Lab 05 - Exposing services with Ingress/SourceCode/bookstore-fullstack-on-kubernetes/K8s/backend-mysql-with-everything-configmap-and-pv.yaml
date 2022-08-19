@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-mysql
+  labels:
+    app: mysql  
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  selector:
+    matchLabels:
+        app: bookstore
+        tier: backend-mysql
+  template:
+    metadata:
+      labels:
+        app: bookstore
+        tier: backend-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: quay.io/mromdhani/mysql:8.0
+        envFrom:
+          - configMapRef:
+               name: backend-mysql-configs
+          - secretRef:
+               name: backend-mysql-secrets     
+        ports:
+          - containerPort: 3306
+            protocol: TCP
+        volumeMounts:
+          - name: mysql-persistent-storage
+            mountPath: /var/lib/mysql
+      volumes:
+        - name: mysql-persistent-storage
+          persistentVolumeClaim:
+             claimName: mysql-pv-claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-mysql
+spec:
+  type: ClusterIP
+  selector:
+    app: bookstore
+    tier: backend-mysql
+  ports:
+    - port: 3306
+      targetPort: 3306

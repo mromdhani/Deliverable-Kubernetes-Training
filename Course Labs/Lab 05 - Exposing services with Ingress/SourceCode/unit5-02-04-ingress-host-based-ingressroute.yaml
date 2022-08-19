@@ -1,0 +1,25 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: example-ingress-host-based-crd
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match:  Host(`apple.fruits.org`) 
+      kind: Rule
+      services:
+        - name: apple-service
+          port: 5678
+          strategy: RoundRobin
+          weight: 10            
+    - match: Host(`banana.fruits.org`)
+      kind: Rule
+      services:
+        - name: banana-service
+          port: 5678
+          strategy: RoundRobin
+          weight: 10
+
+# Middleware are not required here because we are accessing the 
+# services at their native endpoint which is /.

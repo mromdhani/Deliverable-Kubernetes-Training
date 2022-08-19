@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-loadbalancer
+spec:
+  selector:
+    matchLabels:
+      run: dockercloud-lb
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        run: dockercloud-lb
+    spec:
+      containers:
+      - name: dockercloud
+        image: quay.io/mromdhani/hello-world
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-loadbalancer
+spec:
+  # Exposes the service using an external loadbalancer
+  type: LoadBalancer
+  # When the loadbalancer receives a request on the  port (8080) it forward the request to one 
+  # of the pods on their port 80.
+  selector:
+    run: dockercloud-lb
+  ports:
+  - port: 8080        # Port exposed by the loadbalancer
+    targetPort: 80    # port that containers are listening to
+    protocol: TCP

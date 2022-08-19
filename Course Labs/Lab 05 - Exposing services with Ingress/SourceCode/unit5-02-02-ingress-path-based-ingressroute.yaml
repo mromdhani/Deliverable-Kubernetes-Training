@@ -1,0 +1,37 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: example-ingress-path-based-crd
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/apple`) 
+      kind: Rule
+      services:
+        - name: apple-service
+          port: 5678
+          strategy: RoundRobin
+          weight: 10
+      middlewares:
+        - name: do-stripprefix
+            
+    - match: PathPrefix(`/banana`) 
+      kind: Rule
+      services:
+        - name: banana-service
+          port: 5678
+          strategy: RoundRobin
+          weight: 10
+      middlewares:
+        - name: do-stripprefix
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: do-stripprefix
+spec:
+  stripPrefix:
+    prefixes:
+      - /apple
+      - /banana
